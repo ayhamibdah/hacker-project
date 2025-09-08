@@ -1,0 +1,71 @@
+Exercise 0 — testShell00
+# Start clean
+mkdir -p ex0 && cd ex0
+
+# Create exactly 40 bytes (all zeros) and set perms r-- r-x r-x  => 0455
+truncate -s 40 testShell00
+chmod 455 testShell00
+
+# (Optional) verify
+ls -l
+
+# Package for submission
+tar -cf testShell00.tar testShell00
+**************************************************************************************************************************************************************************
+
+**************************************************************************************************************************************************************************
+
+**************************************************************************************************************************************************************************
+
+
+Exercise 1 — “Oh yeah, mooore…”
+# Fresh dir
+cd ..; rm -rf ex1; mkdir ex1; cd ex1
+
+# test0  -> drwx--xr-x  => 0715
+mkdir -m 715 test0
+
+# test1  -> -rwx--xr-- size 4 => 0714
+printf 'data' > test1
+chmod 714 test1
+
+# test2  -> dr-x---r--  => 0504
+mkdir -m 504 test2
+
+# test3/test5 -> hard links to same inode, perms -r-----r--, size 1, link count 2 => 0404
+printf 'a' > test3
+chmod 404 test3
+ln test3 test5   # creates second hard link (now both show "2" in link count)
+
+# test4 -> -rw-r---x size 2 => 0641
+printf 'hi' > test4
+chmod 641 test4
+
+# test6 -> symlink -> test0
+ln -s test0 test6
+
+# (Optional) verify
+ls -l
+
+# Package for submission
+tar -cf ex1.tar *
+**************************************************************************************************************************************************************************
+
+**************************************************************************************************************************************************************************
+
+**************************************************************************************************************************************************************************
+Exercise 2 — midLS
+# Fresh dir
+cd ..; rm -rf ex2; mkdir ex2; cd ex2
+
+# Create the script file
+cat > midLS << 'SH'
+#!/bin/sh
+# List (newest first, directories end with '/', no dotfiles), join with ", "
+ls -1pt | sed '/^\./d' | paste -sd ', ' -
+SH
+chmod +x midLS
+
+# (Optional) test:
+# ./midLS
+
