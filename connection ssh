@@ -1,0 +1,28 @@
+# 1. Generate SSH key
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+# 2. Show public key (copy it and add to GitHub Settings → SSH keys)
+cat ~/.ssh/id_ed25519.pub
+
+# 3. Test SSH connection
+ssh -T git@github.com
+
+# 4. Clone the repo (replace USERNAME/REPOSITORY with yours)
+git clone git@github.com:USERNAME/REPOSITORY.git
+cd REPOSITORY
+
+# --- OR if you already have a project folder you want to push ---
+
+cd /path/to/your/project
+git init
+git remote add origin git@github.com:USERNAME/REPOSITORY.git
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git push -u origin main
+
+# 5. Daily workflow
+git add .
+git commit -m "update"
+git push
+git pull
