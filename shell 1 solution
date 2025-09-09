@@ -44,6 +44,14 @@ chmod 641 test4
 # test6 -> symlink -> test0
 ln -s test0 test6
 
+touch -t 202406012047 test0
+touch -t 202406012146 test1
+touch -t 202406012245 test2
+touch -t 202406012344 test3
+touch -t 202406012343 test4
+# test5 inherits test3 timestamp (hard link)
+touch -h -t 202406012220 test6   # symlink
+
 # (Optional) verify
 ls -l
 
@@ -59,11 +67,7 @@ Exercise 2 — midLS
 cd ..; rm -rf ex2; mkdir ex2; cd ex2
 
 # Create the script file
-cat > midLS << 'SH'
-#!/bin/sh
-# List (newest first, directories end with '/', no dotfiles), join with ", "
-ls -1pt | sed '/^\./d' | paste -sd ', ' -
-SH
+nano midLS >> "ls -t -m -p"
 chmod +x midLS
 
 # (Optional) test:
@@ -78,7 +82,7 @@ cd ..; rm -rf ex3; mkdir ex3; cd ex3
 
 # Create the exact filename with special chars and write exactly two bytes: 4 and 2
 # (printf without a newline)
-printf 42 > "?$*'MaRViN'*$?"
+printf 42 > "\"\\?\$*'MaRViN'*\$?\\\""
 
 # (Optional) verify size (should be 2 bytes) and name rendering
 ls -lRa *MaRV* | cat -A
