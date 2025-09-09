@@ -96,5 +96,22 @@ ls -lRa *MaRV* | cat -A
 # git_commit.sh - Display the last 5 commit IDs using grep
 
 git log | grep "^commit" | head -n 5 | awk '{print $2}'
+**************************************************************************************************************************************************************************
+
+**************************************************************************************************************************************************************************
+
+**************************************************************************************************************************************************************************  GNU nano 8.1                                        git_ignore.sh                                                  
+#!/bin/bash
+
+# This script lists all files ignored by the Git repository.
+
+# The 'git ls-files' command is used with the following options:
+# --others: Lists untracked files.
+# --ignored: Includes files that are explicitly ignored by Git (e.g., via .gitignore).
+# --exclude-standard: Applies standard Git exclusion rules (from .gitignore, .git/info/exclude, and global excludes).
+
+git ls-files --others --ignored --exclude-standard
+
+
 
 
