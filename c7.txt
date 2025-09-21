@@ -1,0 +1,232 @@
+#include <stdlib.h>
+
+char *ft_strdup(char *src)
+{
+    int i = 0;
+    int len = 0;
+    char *dup;
+
+    // Step 1: find the length of src
+    while (src[len])
+        len++;
+
+    // Step 2: allocate memory (len + 1 for '\0')
+    dup = (char *)malloc(sizeof(char) * (len + 1));
+    if (!dup) // malloc failed
+        return (NULL);
+
+    // Step 3: copy characters
+    while (i < len)
+    {
+        dup[i] = src[i];
+        i++;
+    }
+
+    // Step 4: null terminate
+    dup[i] = '\0';
+
+    return (dup);
+}
+
+**********************************************
+#include <stdlib.h>
+
+int *ft_range(int min, int max)
+{
+    int *arr;
+    int i;
+    int size;
+
+    if (min >= max)
+        return (NULL);
+
+    size = max - min;
+    arr = (int *)malloc(sizeof(int) * size);
+    if (!arr)  // check if malloc failed
+        return (NULL);
+
+    i = 0;
+    while (i < size)
+    {
+        arr[i] = min + i;
+        i++;
+    }
+    return (arr);
+}
+**********************************************
+#include <stdlib.h>
+
+int ft_ultimate_range(int **range, int min, int max)
+{
+    int i;
+    int size;
+
+    if (min >= max)
+    {
+        *range = NULL;
+        return (0);
+    }
+
+    size = max - min;
+    *range = (int *)malloc(sizeof(int) * size);
+    if (!*range) // malloc failed
+        return (-1);
+
+    i = 0;
+    while (i < size)
+    {
+        (*range)[i] = min + i;
+        i++;
+    }
+
+    return (size);
+}
+**************************************************
+#include <stdlib.h>
+
+int ft_strlen(char *str)
+{
+    int len = 0;
+    while (str[len])
+        len++;
+    return len;
+}
+
+char *ft_strcat(char *dest, char *src)
+{
+    int i = 0;
+    int j = 0;
+
+    while (dest[i])
+        i++;
+    while (src[j])
+    {
+        dest[i] = src[j];
+        i++;
+        j++;
+    }
+    dest[i] = '\0';
+    return dest;
+}
+
+char *ft_strjoin(int size, char **strs, char *sep)
+{
+    int total_len = 0;
+    int i;
+    char *result;
+
+    if (size == 0)
+    {
+        result = (char *)malloc(1);
+        if (result)
+            result[0] = '\0';
+        return result;
+    }
+
+    // Calculate total length
+    for (i = 0; i < size; i++)
+        total_len += ft_strlen(strs[i]);
+    total_len += ft_strlen(sep) * (size - 1);
+
+    // Allocate memory
+    result = (char *)malloc(sizeof(char) * (total_len + 1));
+    if (!result)
+        return NULL;
+
+    result[0] = '\0'; // start empty string
+
+    // Concatenate strings with separator
+    for (i = 0; i < size; i++)
+    {
+        ft_strcat(result, strs[i]);
+        if (i < size - 1)
+            ft_strcat(result, sep);
+    }
+
+    return result;
+}
+*****************************************************
+#include <stdlib.h>
+
+int is_sep(char c, char *charset)
+{
+    int i = 0;
+    while (charset[i])
+    {
+        if (c == charset[i])
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
+int count_words(char *str, char *charset)
+{
+    int i = 0;
+    int count = 0;
+    int in_word = 0;
+
+    while (str[i])
+    {
+        if (is_sep(str[i], charset))
+            in_word = 0;
+        else if (!in_word)
+        {
+            in_word = 1;
+            count++;
+        }
+        i++;
+    }
+    return count;
+}
+
+char *malloc_word(char *str, char *charset)
+{
+    int i = 0;
+    char *word;
+
+    while (str[i] && !is_sep(str[i], charset))
+        i++;
+    word = (char *)malloc(sizeof(char) * (i + 1));
+    if (!word)
+        return NULL;
+    i = 0;
+    while (str[i] && !is_sep(str[i], charset))
+    {
+        word[i] = str[i];
+        i++;
+    }
+    word[i] = '\0';
+    return word;
+}
+************************************************
+the is code here
+  
+char **ft_split(char *str, char *charset)
+{
+    int i = 0;
+    int j = 0;
+    char **result;
+    int words = count_words(str, charset);
+
+    result = (char **)malloc(sizeof(char *) * (words + 1));
+    if (!result)
+        return NULL;
+
+    while (*str)
+    {
+        if (!is_sep(*str, charset))
+        {
+            result[j] = malloc_word(str, charset);
+            if (!result[j])
+                return NULL; // could add free-all here
+            j++;
+            while (*str && !is_sep(*str, charset))
+                str++;
+        }
+        else
+            str++;
+    }
+    result[j] = 0;
+    return result;
+}
